@@ -4,23 +4,36 @@ format: html
 editor: visual
 ---
 
-## Quarto
+## Task 1: Conceptual Questions
+1. What is the purpose of the lapply() function? What is the equivalent purrr function?
+> The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+2. Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns
+are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall")
+on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify
+method = "kendall" when calling lapply())
+> lapply(numeric_namtrix = my_list, method = "kendall")
 
-## Running Code
+3. What are two advantages of using purrr functions instead of the BaseR apply family?
+> The purrr functions have common function names and syntax across functions. 
 
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+4. What is a side-effect function?
+> A side-effect function is a function that doesn't change anything it just creates output.
 
+5. Why can you name a variable sd in a function and not cause any issues with the sd function?
+> local/global properties of objects.
+
+
+## Task 2: Writing R Functions
 ```{r}
-1 + 1
+getRMSE <- function(responses, predictions){
+  n <- length(responses)
+  RMSE <- sqrt((1/n)*sum((responses - predictions)^2)
+    
+  )
+}
 ```
 
-You can add options to executable code like this
+## Task 3: Querying an API and a Tidy-Style Function
 
-```{r}
-#| echo: false
-2 * 2
-```
 
-The `echo: false` option disables the printing of code (only output is displayed).
