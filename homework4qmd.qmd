@@ -6,28 +6,35 @@ editor: visual
 execute:
   error: TRUE
 ---
-In this document, we will be writing functions and dealing with missing values. We will start by answering conceptual questions about this weeks lecture material. 
+
+In this document, we will be writing functions and dealing with missing values. We will start by answering conceptual questions about this weeks lecture material.
 
 ## Task 1: Conceptual Questions
-1. What is the purpose of the lapply() function? What is the equivalent purrr function?  
-> The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function
 
-2. Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall")
-on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())  
-> lapply(numeric_namtrix = my_list, method = "kendall")
+1.  What is the purpose of the lapply() function? What is the equivalent purrr function?
 
-3. What are two advantages of using purrr functions instead of the BaseR apply family?  
-> The purrr functions have common function names and syntax across functions. 
+    \> The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function
 
-4. What is a side-effect function?  
-> A side-effect function is a function that doesn't change anything it just creates output.
+2.  Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall") on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())
 
-5. Why can you name a variable sd in a function and not cause any issues with the sd function?  
-> Inside the function when we call it, there is a temporary function environment which is then destroyed after running the funciton.  
+    \> lapply(numeric_namtrix = my_list, method = "kendall")
 
+3.  What are two advantages of using purrr functions instead of the BaseR apply family?
+
+    \> The purrr functions have common function names and syntax across functions.
+
+4.  What is a side-effect function?
+
+    \> A side-effect function is a function that doesn't change anything it just creates output.
+
+5.  Why can you name a variable sd in a function and not cause any issues with the sd function?
+
+    \> Inside the function when we call it, there is a temporary function environment which is then destroyed after running the function.
 
 ## Task 2: Writing R Functions
-First, we will write a function that finds the RMSE of a response vector and a respective predictions vector. 
+
+First, we will write a function that finds the RMSE of a response vector and a respective predictions vector.
+
 ```{r}
 # I will be adding ... into the function to apply other arguments after the fact. 
 getRMSE <- function(responses, predictions,...){
@@ -36,7 +43,8 @@ getRMSE <- function(responses, predictions,...){
 }
 ```
 
-Now, I will test the function after creating data with no missing values. 
+Now, I will test the function after creating data with no missing values.
+
 ```{r}
 set.seed(10)
 n <- 100
@@ -45,7 +53,9 @@ resp <- 3 + 10*x + rnorm(n)
 pred <- predict(lm(resp ~ x), data.frame(x))
 getRMSE(responses = resp, predictions = pred)
 ```
-Now, I will test the function after creating a vector "resp_NA" which contains missing values. 
+
+Now, I will test the function after creating a vector "resp_NA" which contains missing values.
+
 ```{r}
 resp_NA <- c(resp[1:98],NA_real_,NA_real_)
 # First we will apply the function without removing the missing values to verify an error. 
@@ -53,7 +63,9 @@ getRMSE(responses = resp_NA, predictions = pred)
 # Then we will apply the function with specifying, na.rm = TRUE to remove the missing values.
 getRMSE(responses = resp_NA, predictions = pred, na.rm = TRUE)
 ```
-Now we will be writing a function to calculate the MAE of a response vector and a respective predictions vector. 
+
+Now we will be writing a function to calculate the MAE of a response vector and a respective predictions vector.
+
 ```{r}
 # I will be adding ... into the function to apply other arguments after the fact. 
 getMAE <- function(responses, predictions, ...){
@@ -63,11 +75,13 @@ getMAE <- function(responses, predictions, ...){
 ```
 
 Now I will test the getMAE function:
+
 ```{r}
 getMAE(responses = resp, predictions = pred)
 ```
 
 Now I will test the getMAE function with missing data.
+
 ```{r}
 # First we will apply the function without removing the missing values to verify an error. 
 getMAE(responses = resp_NA, predictions = pred)
@@ -75,7 +89,8 @@ getMAE(responses = resp_NA, predictions = pred)
 getMAE(responses = resp_NA, predictions = pred, na.rm = TRUE)
 ```
 
-Now, we will create a wrapper function that calculates the RMSE and/or MAE. 
+Now, we will create a wrapper function that calculates the RMSE and/or MAE.
+
 ```{r}
 my_wrapper <- function(responses, predictions, get = "both"){
   # First we will combine the vectors to more efficiently check for missing/incorrect data.
@@ -104,50 +119,53 @@ MAE <- getMAE(responses, predictions)
   }
 ```
 
-
-Now, we will test the wrapper function.
- - First, we will test by calling for each metric individually.
+Now, we will test the wrapper function. - First, we will test by calling for each metric individually.
 
 ```{r}
 my_wrapper(resp, pred, "RMSE")
 my_wrapper(resp, pred, "MAE")
 ```
- - Now, we will apply the function specifying both metrics to be returned:
+
+-   Now, we will apply the function specifying both metrics to be returned:
+
 ```{r}
 my_wrapper(resp,pred, "both")
 ```
 
- - Now we will repeat with a vector containing missing values.
+-   Now we will repeat with a vector containing missing values.
+
 ```{r}
 my_wrapper(resp_NA, pred)
 ```
- - Now we will apply the function to the incorrect data object (a data frame):
+
+-   Now we will apply the function to the incorrect data object (a data frame):
+
 ```{r}
 resp_data_frame <- data.frame(resp)
 my_wrapper(resp_data_frame, pred)
 ```
 
-
 ## Task 3: Querying an API and a Tidy-Style Function
+
 d042b6702b44494f8531596ad64cf58c
 
-1. Use GET() from the httr package to return information about a topic that you are interested in that
-has been in the news lately (store the result as an R object). Note: We can only look 30 days into the
-past with a free account.
+1.  Use GET() from the httr package to return information about a topic that you are interested in that has been in the news lately (store the result as an R object). Note: We can only look 30 days into the past with a free account.
+
 ```{r}
 url_id <- "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d042b6702b44494f8531596ad64cf58c"
 id_info <- httr::GET(url_id)
 str(id_info, max.level = 1)
 ```
 
-2. Now we will parse what is returned and find our way to the data frame that has the actual article information in it.
+2.  Now we will parse what is returned and find our way to the data frame that has the actual article information in it.
+
 ```{r}
 library(jsonlite)
 parsed <- fromJSON(rawToChar(id_info$content))
 headline_info <- tibble::as_tibble(parsed$articles)
 ```
 
-3. Now  we will write a quick function that allows the user to easily query this API. The inputs to the function should be the title/subject to search for (string), a time period to search from (string - you’ll search from that time until the present), and an API key.
+3.  Now we will write a quick function that allows the user to easily query this API. The inputs to the function should be the title/subject to search for (string), a time period to search from (string - you’ll search from that time until the present), and an API key.
 
 ```{r}
 library(tidyverse)
@@ -155,6 +173,7 @@ library(purrr)
 ```
 
 This function will take in a url. If no title_keywords are specified, it returns the whole data set. If title_keywords are specified, it will search the title to find matches and filter based on those matches.
+
 ```{r}
 access <- function(url_id, title_keywords = NULL, starting_year = 0,...){
   id_info <- httr::GET(url_id)
@@ -178,25 +197,28 @@ access <- function(url_id, title_keywords = NULL, starting_year = 0,...){
 ```
 
 We will test our function by accessing the API used before.
+
 ```{r}
 access(url_id = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d042b6702b44494f8531596ad64cf58c")
 ```
 
-Now, we will test it by specifying keywords to select different articles. 
+Now, we will test it by specifying keywords to select different articles.
+
 ```{r}
 access(url_id = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d042b6702b44494f8531596ad64cf58c", 
        title_keywords = c("hedge", "prime day"))
 ```
 
 Now, lets try testing it by accessing a different link.
+
 ```{r}
 access(url_id = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=d042b6702b44494f8531596ad64cf58c")
 ```
+
 Using this link, we are able to specify different keywords and select only from the recent year.
+
 ```{r}
 access(url_id = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=d042b6702b44494f8531596ad64cf58c", 
        title_keywords = c("uber one", "crypto", "macbooks"), 
        starting_year = 2024)
 ```
-
-
