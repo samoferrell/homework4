@@ -3,6 +3,8 @@ title: "Homeowrk 4 - ST558 "
 author: "Sam O'Ferrell"
 format: html
 editor: visual
+execute:
+  error: TRUE
 ---
 In this document, we will be writing functions and dealing with missing values. We will start by answering conceptual questions about this weeks lecture material. 
 
