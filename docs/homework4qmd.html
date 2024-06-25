@@ -8,7 +8,7 @@
 
 <meta name="author" content="Sam O’Ferrell">
 
-<title>Homeowrk 4 - ST558</title>
+<title>Homework 4 - ST558</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -117,7 +117,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Homeowrk 4 - ST558</h1>
+<h1 class="title">Homework 4 - ST558</h1>
 </div>
 
 
@@ -144,11 +144,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="task-1-conceptual-questions" class="level2">
 <h2 class="anchored" data-anchor-id="task-1-conceptual-questions">Task 1: Conceptual Questions</h2>
 <ol type="1">
-<li><p>What is the purpose of the lapply() function? What is the equivalent purrr function? &gt; The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function</p></li>
-<li><p>Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = “kendall”) on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = “kendall” when calling lapply()) &gt; lapply(numeric_namtrix = my_list, method = “kendall”)</p></li>
-<li><p>What are two advantages of using purrr functions instead of the BaseR apply family? &gt; The purrr functions have common function names and syntax across functions.</p></li>
-<li><p>What is a side-effect function? &gt; A side-effect function is a function that doesn’t change anything it just creates output.</p></li>
-<li><p>Why can you name a variable sd in a function and not cause any issues with the sd function? &gt; Inside the function when we call it, there is a temporary function environment which is then destroyed after running the funciton.</p></li>
+<li><p>What is the purpose of the lapply() function? What is the equivalent purrr function?<br>
+&gt; The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function</p></li>
+<li><p>Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = “kendall”) on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = “kendall” when calling lapply())<br>
+&gt; lapply(numeric_namtrix = my_list, method = “kendall”)</p></li>
+<li><p>What are two advantages of using purrr functions instead of the BaseR apply family?<br>
+&gt; The purrr functions have common function names and syntax across functions.</p></li>
+<li><p>What is a side-effect function?<br>
+&gt; A side-effect function is a function that doesn’t change anything it just creates output.</p></li>
+<li><p>Why can you name a variable sd in a function and not cause any issues with the sd function?<br>
+&gt; Inside the function when we call it, there is a temporary function environment which is then destroyed after running the funciton.</p></li>
 </ol>
 </section>
 <section id="task-2-writing-r-functions" class="level2">
@@ -307,9 +312,9 @@ $`Mean Absolute Deviation`
   ..- attr(*, "class")= chr [1:2] "insensitive" "list"
  $ all_headers:List of 1
  $ cookies    :'data.frame':    0 obs. of  7 variables:
- $ content    : raw [1:13505] 7b 22 73 74 ...
- $ date       : POSIXct[1:1], format: "2024-06-25 16:17:42"
- $ times      : Named num [1:6] 0 0.209 0.233 0.311 0.802 ...
+ $ content    : raw [1:13273] 7b 22 73 74 ...
+ $ date       : POSIXct[1:1], format: "2024-06-25 20:11:39"
+ $ times      : Named num [1:6] 0 0.18 0.21 0.284 0.403 ...
   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
  $ request    :List of 7
   ..- attr(*, "class")= chr "request"
@@ -386,37 +391,36 @@ $`Mean Absolute Deviation`
 <pre><code># A tibble: 20 × 8
    source$id $name author title description url   urlToImage publishedAt content
    &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 reuters   Reut… Reute… Nvid… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
- 2 reuters   Reut… Reute… Fast… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
- 3 &lt;NA&gt;      Yaho… &lt;NA&gt;   Anal… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24… "If yo…
- 4 &lt;NA&gt;      Yaho… Gerry… Alny… (Bloomberg… http… https://s… 2024-06-24… "(Bloo…
- 5 &lt;NA&gt;      Barr… Barro… Nvid… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
- 6 &lt;NA&gt;      Ambc… Samue… Bitc… Metaplanet… http… https://a… 2024-06-24… "&lt;ul&gt;&lt;…
- 7 associat… Asso… FATIM… Yell… The Biden … http… https://d… 2024-06-24… "WASHI…
- 8 abc-news  ABC … WYATT… Car … Car dealer… http… https://i… 2024-06-24… "NEW Y…
- 9 &lt;NA&gt;      Decr… Taran… Near… In stark c… http… https://c… 2024-06-24… "Bears…
-10 &lt;NA&gt;      Yaho… Brett… Stoc… Stocks are… http… https://s… 2024-06-24… "US st…
-11 google-n… Goog… NBC P… Pass… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-12 google-n… Goog… CNBC   Mond… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-13 google-n… Goog… Inves… 5 Th… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-14 google-n… Goog… Benzi… What… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-15 google-n… Goog… Motor… Duma… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-16 &lt;NA&gt;      AL.c… Leada… Big … Your next … http… https://w… 2024-06-24… "Big c…
-17 techradar Tech… Alex … Oops… Can you sp… http… https://c… 2024-06-24… "Has A…
-18 &lt;NA&gt;      Hind… Ashim… Elon… Elon Musk … http… https://w… 2024-06-24… "Elon …
-19 bloomberg Bloo… Hema … Jain… Bobby Jain… http… https://a… 2024-06-24… "Bobby…
-20 &lt;NA&gt;      Glob… ANI P… ANI … Conference… http… https://m… 2024-06-24… "Confe…</code></pre>
+ 1 &lt;NA&gt;      [Rem… &lt;NA&gt;   "[Re… "[Removed]" http… &lt;NA&gt;       1970-01-01… "[Remo…
+ 2 associat… Asso… WYATT… "Car… "Car deale… http… https://d… 2024-06-24… "NEW Y…
+ 3 &lt;NA&gt;      Decr… Ryan … "Bit… "As Mt. Go… http… https://c… 2024-06-24… "Bitco…
+ 4 &lt;NA&gt;      Fox … Aisli… "San… "The 3,200… http… https://a… 2024-06-24… "A hom…
+ 5 &lt;NA&gt;      Airb… https… "Air… "Airbus SE… http… https://w… 2024-06-24… "&lt;ul&gt;&lt;…
+ 6 &lt;NA&gt;      [Rem… &lt;NA&gt;   "[Re… "[Removed]" http… &lt;NA&gt;       1970-01-01… "[Remo…
+ 7 &lt;NA&gt;      New … Ariel… "Mil… "Jonathan … http… https://n… 2024-06-24… "The m…
+ 8 cnn       CNN   Jorda… "Hoo… "Hooters i… http… https://m… 2024-06-24… "Hoote…
+ 9 &lt;NA&gt;      TheS… TheSt… "Ana…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
+10 bloomberg Bloo… &lt;NA&gt;   "Fun…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24… "To co…
+11 the-wall… The … The W… "Mee…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
+12 &lt;NA&gt;      CNBC  Morga… "Eli… "The Inves… http… https://i… 2024-06-24…  &lt;NA&gt;  
+13 &lt;NA&gt;      Inve… Timot… "Nvi… "AI chipma… http… https://w… 2024-06-24… "UPDAT…
+14 &lt;NA&gt;      TheS… TheSt… "Nvi…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
+15 &lt;NA&gt;      mliv… Brand… "Ama… "Some may … http… https://w… 2024-06-24…  &lt;NA&gt;  
+16 &lt;NA&gt;      Fox … Danie… "Can… "Snapchill… http… https://a… 2024-06-24… "A Wis…
+17 &lt;NA&gt;      Fox … Krist… "Out… "Despite s… http… https://a… 2024-06-24… "After…
+18 &lt;NA&gt;      CNBC  Morga… "29-… "In her ea… http… https://i… 2024-06-24… "Hanna…
+19 reuters   Reut… Kane … "Fas… "Shein con… http… https://w… 2024-06-24…  &lt;NA&gt;  
+20 google-n… Goog… CNBC   "Tru…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  </code></pre>
 </div>
 </div>
 <p>Now, we will test it by specifying keywords to select different articles.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?country=us&amp;category=business&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"hedge"</span>, <span class="st">"prime day"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?country=us&amp;category=business&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, </span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"hedge"</span>, <span class="st">"prime day"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 8
-  source$id $name  author title description url   urlToImage publishedAt content
-  &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
-1 techradar TechR… Alex … Oops… Can you sp… http… https://c… 2024-06-24… "Has A…
-2 bloomberg Bloom… Hema … Jain… Bobby Jain… http… https://a… 2024-06-24… "Bobby…</code></pre>
+<pre><code># A tibble: 0 × 8
+# ℹ 8 variables: source &lt;df[,2]&gt;, author &lt;chr&gt;, title &lt;chr&gt;, description &lt;chr&gt;,
+#   url &lt;chr&gt;, urlToImage &lt;chr&gt;, publishedAt &lt;chr&gt;, content &lt;chr&gt;</code></pre>
 </div>
 </div>
 <p>Now, lets try testing it by accessing a different link.</p>
@@ -440,7 +444,9 @@ $`Mean Absolute Deviation`
 </div>
 <p>Using this link, we are able to specify different keywords and select only from the recent year.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?sources=techcrunch&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"uber one"</span>, <span class="st">"crypto"</span>, <span class="st">"macbooks"</span>), <span class="at">starting_year =</span> <span class="dv">2024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?sources=techcrunch&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"uber one"</span>, <span class="st">"crypto"</span>, <span class="st">"macbooks"</span>), </span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">starting_year =</span> <span class="dv">2024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 8
   source$id  $name author title description url   urlToImage publishedAt content
