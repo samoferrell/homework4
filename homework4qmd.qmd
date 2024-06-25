@@ -11,25 +11,25 @@ In this document, we will be writing functions and dealing with missing values. 
 
 ## Task 1: Conceptual Questions
 
-1.  What is the purpose of the lapply() function? What is the equivalent purrr function?
+What is the purpose of the lapply() function? What is the equivalent purrr function?
 
-    \> The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function
+> The purpose of the lapply() function is to apply a function to each element in a list. The equivalent purrr function is the map() function
 
-2.  Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall") on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())
+Suppose we have a list called my_list. Each element of the list is a numeric data frame (all columns are numeric). We want use lapply() to run the code cor(numeric_matrix, method = "kendall") on each element of the list. Write code to do this below! (I’m really trying to ask you how you specify method = "kendall" when calling lapply())
 
-    \> lapply(numeric_namtrix = my_list, method = "kendall")
+> lapply(numeric_namtrix = my_list, method = "kendall")
 
-3.  What are two advantages of using purrr functions instead of the BaseR apply family?
+What are two advantages of using purrr functions instead of the BaseR apply family?
 
-    \> The purrr functions have common function names and syntax across functions.
+> The purrr functions have common function names and syntax across functions.
 
-4.  What is a side-effect function?
+What is a side-effect function?
 
-    \> A side-effect function is a function that doesn't change anything it just creates output.
+> A side-effect function is a function that doesn't change anything it just creates output.
 
-5.  Why can you name a variable sd in a function and not cause any issues with the sd function?
+Why can you name a variable sd in a function and not cause any issues with the sd function?
 
-    \> Inside the function when we call it, there is a temporary function environment which is then destroyed after running the function.
+> Inside the function when we call it, there is a temporary function environment which is then destroyed after running the function.
 
 ## Task 2: Writing R Functions
 
