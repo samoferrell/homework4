@@ -304,7 +304,6 @@ $`Mean Absolute Deviation`
 </section>
 <section id="task-3-querying-an-api-and-a-tidy-style-function" class="level2">
 <h2 class="anchored" data-anchor-id="task-3-querying-an-api-and-a-tidy-style-function">Task 3: Querying an API and a Tidy-Style Function</h2>
-<p>d042b6702b44494f8531596ad64cf58c</p>
 <ol type="1">
 <li>Use GET() from the httr package to return information about a topic that you are interested in that has been in the news lately (store the result as an R object). Note: We can only look 30 days into the past with a free account.</li>
 </ol>
@@ -316,13 +315,13 @@ $`Mean Absolute Deviation`
 <pre><code>List of 10
  $ url        : chr "https://newsapi.org/v2/top-headlines?country=us&amp;category=business&amp;apiKey=d042b6702b44494f8531596ad64cf58c"
  $ status_code: int 200
- $ headers    :List of 16
+ $ headers    :List of 14
   ..- attr(*, "class")= chr [1:2] "insensitive" "list"
  $ all_headers:List of 1
  $ cookies    :'data.frame':    0 obs. of  7 variables:
- $ content    : raw [1:13273] 7b 22 73 74 ...
- $ date       : POSIXct[1:1], format: "2024-06-25 20:24:16"
- $ times      : Named num [1:6] 0 0.141 0.163 0.23 0.284 ...
+ $ content    : raw [1:16581] 7b 22 73 74 ...
+ $ date       : POSIXct[1:1], format: "2024-06-26 04:31:12"
+ $ times      : Named num [1:6] 0 0.133 0.158 0.217 0.365 ...
   ..- attr(*, "names")= chr [1:6] "redirect" "namelookup" "connect" "pretransfer" ...
  $ request    :List of 7
   ..- attr(*, "class")= chr "request"
@@ -370,98 +369,67 @@ $`Mean Absolute Deviation`
 </div>
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(purrr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This function will take in a url. If no title_keywords are specified, it returns the whole data set. If title_keywords are specified, it will search the title to find matches and filter based on those matches.</p>
+<p>This function will take in an api_key, a title, and a time, and return a parsed data set as a tibble.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>access <span class="ot">&lt;-</span> <span class="cf">function</span>(url_id, <span class="at">title_keywords =</span> <span class="cn">NULL</span>, <span class="at">starting_year =</span> <span class="dv">0</span>,...){</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  id_info <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(url_id)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(id_info<span class="sc">$</span>content))</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  headline_info <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(parsed<span class="sc">$</span>articles)</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if no title keywords are specified, return the whole data set.</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(title_keywords)){</span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(headline_info)}</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span> {</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lower case the title keywords and create a </span></span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  lower_case <span class="ot">&lt;-</span> <span class="fu">tolower</span>(title_keywords)</span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  vector_keywords <span class="ot">&lt;-</span> <span class="fu">paste</span>(lower_case, <span class="at">collapse =</span> <span class="st">"|"</span>)</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>   filtered <span class="ot">&lt;-</span> headline_info <span class="sc">|&gt;</span></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">grepl</span>(vector_keywords, <span class="fu">tolower</span>(title)),</span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>           <span class="fu">as.numeric</span>(<span class="fu">substr</span>(publishedAt,<span class="dv">1</span>,<span class="dv">4</span>)) <span class="sc">&gt;=</span> starting_year)</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="co"># if title keywords are specified, we will use str_detect to find look through and filter the titles.</span></span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(filtered)}</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>access_function <span class="ot">&lt;-</span> <span class="cf">function</span>(api_key, title, time){</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  url_start <span class="ot">&lt;-</span> <span class="st">"https://newsapi.org/v2/everything?q="</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  url_full <span class="ot">&lt;-</span> <span class="fu">paste</span>(url_start, </span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>                    title, <span class="st">"&amp;from="</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                    time,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"&amp;apiKey="</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>                    api_key,</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sep =</span><span class="st">""</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  id_info <span class="ot">&lt;-</span> httr<span class="sc">::</span><span class="fu">GET</span>(url_full)</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="fu">rawToChar</span>(id_info<span class="sc">$</span>content))</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  headline_info <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(parsed<span class="sc">$</span>articles)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(headline_info)</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will test our function by accessing the API used before.</p>
+<p>We will test our function by using our api key and specifying articles about cars from 2024-06-01.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?country=us&amp;category=business&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cars <span class="ot">&lt;-</span> <span class="fu">access_function</span>(<span class="at">api_key =</span> <span class="st">"d042b6702b44494f8531596ad64cf58c"</span>,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">title =</span> <span class="st">"cars"</span>,</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">time =</span> <span class="st">"2024-06-01"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>cars</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 20 × 8
+<pre><code># A tibble: 100 × 8
    source$id $name author title description url   urlToImage publishedAt content
    &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 &lt;NA&gt;      [Rem… &lt;NA&gt;   "[Re… "[Removed]" http… &lt;NA&gt;       1970-01-01… "[Remo…
- 2 associat… Asso… WYATT… "Car… "Car deale… http… https://d… 2024-06-24… "NEW Y…
- 3 &lt;NA&gt;      Decr… Ryan … "Bit… "As Mt. Go… http… https://c… 2024-06-24… "Bitco…
- 4 &lt;NA&gt;      Fox … Aisli… "San… "The 3,200… http… https://a… 2024-06-24… "A hom…
- 5 &lt;NA&gt;      Airb… https… "Air… "Airbus SE… http… https://w… 2024-06-24… "&lt;ul&gt;&lt;…
- 6 &lt;NA&gt;      [Rem… &lt;NA&gt;   "[Re… "[Removed]" http… &lt;NA&gt;       1970-01-01… "[Remo…
- 7 &lt;NA&gt;      New … Ariel… "Mil… "Jonathan … http… https://n… 2024-06-24… "The m…
- 8 cnn       CNN   Jorda… "Hoo… "Hooters i… http… https://m… 2024-06-24… "Hoote…
- 9 &lt;NA&gt;      TheS… TheSt… "Ana…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-10 bloomberg Bloo… &lt;NA&gt;   "Fun…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24… "To co…
-11 the-wall… The … The W… "Mee…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-12 &lt;NA&gt;      CNBC  Morga… "Eli… "The Inves… http… https://i… 2024-06-24…  &lt;NA&gt;  
-13 &lt;NA&gt;      Inve… Timot… "Nvi… "AI chipma… http… https://w… 2024-06-24… "UPDAT…
-14 &lt;NA&gt;      TheS… TheSt… "Nvi…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  
-15 &lt;NA&gt;      mliv… Brand… "Ama… "Some may … http… https://w… 2024-06-24…  &lt;NA&gt;  
-16 &lt;NA&gt;      Fox … Danie… "Can… "Snapchill… http… https://a… 2024-06-24… "A Wis…
-17 &lt;NA&gt;      Fox … Krist… "Out… "Despite s… http… https://a… 2024-06-24… "After…
-18 &lt;NA&gt;      CNBC  Morga… "29-… "In her ea… http… https://i… 2024-06-24… "Hanna…
-19 reuters   Reut… Kane … "Fas… "Shein con… http… https://w… 2024-06-24…  &lt;NA&gt;  
-20 google-n… Goog… CNBC   "Tru…  &lt;NA&gt;       http… &lt;NA&gt;       2024-06-24…  &lt;NA&gt;  </code></pre>
+ 1 wired     Wired Aaria… NYC’… New York C… http… https://m… 2024-06-07… "On We…
+ 2 &lt;NA&gt;      Gizm… Matt … Waym… Waymo issu… http… https://i… 2024-06-12… "Waymo…
+ 3 &lt;NA&gt;      Yaho… Danny… Gene… Cruise, Ge… http… &lt;NA&gt;       2024-06-11… "If yo…
+ 4 the-verge The … Janko… Redb… The DVD re… http… https://c… 2024-06-21… "Redbo…
+ 5 &lt;NA&gt;      Slas… msmash Chin… Assisted d… http… https://a… 2024-06-13… "The w…
+ 6 &lt;NA&gt;      Read… James… Drea… Dreamcars&nbsp;… http… https://r… 2024-06-16… "Dream…
+ 7 &lt;NA&gt;      Yaho… &lt;NA&gt;   Best… &lt;NA&gt;        http… &lt;NA&gt;       2024-06-08… "If yo…
+ 8 ars-tech… Ars … Kevin… Fisk… No word on… http… https://c… 2024-06-18… "Enlar…
+ 9 the-verge The … Abiga… The … Intelligen… http… https://c… 2024-06-12… "The s…
+10 business… Busi… Jaure… Why … Stellantis… http… https://i… 2024-06-14… "Stell…
+# ℹ 90 more rows</code></pre>
 </div>
 </div>
-<p>Now, we will test it by specifying keywords to select different articles.</p>
+<p>Now, we will test it again using our api key and specifying articles about chess from 2024-06-15.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?country=us&amp;category=business&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, </span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"hedge"</span>, <span class="st">"prime day"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>chess <span class="ot">&lt;-</span> <span class="fu">access_function</span>(<span class="at">api_key =</span> <span class="st">"d042b6702b44494f8531596ad64cf58c"</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">"chess"</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">time =</span> <span class="st">"2024-06-15"</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>chess</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 0 × 8
-# ℹ 8 variables: source &lt;df[,2]&gt;, author &lt;chr&gt;, title &lt;chr&gt;, description &lt;chr&gt;,
-#   url &lt;chr&gt;, urlToImage &lt;chr&gt;, publishedAt &lt;chr&gt;, content &lt;chr&gt;</code></pre>
-</div>
-</div>
-<p>Now, lets try testing it by accessing a different link.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?sources=techcrunch&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 8
+<pre><code># A tibble: 100 × 8
    source$id $name author title description url   urlToImage publishedAt content
    &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
- 1 techcrun… Tech… Laure… Bye-… Autonomous… http… https://t… 2024-05-08… "Auton…
- 2 techcrun… Tech… Alex … $450… This morni… http… https://t… 2024-05-08… "Good …
- 3 techcrun… Tech… Alex … Watc… Would you … http… https://t… 2024-05-08… "Apple…
- 4 techcrun… Tech… Rebec… Uber… Uber plans… http… https://t… 2024-05-08… "Uber …
- 5 techcrun… Tech… Mike … Chec… Checkfirst… http… https://t… 2024-05-08… "Weve …
- 6 techcrun… Tech… Paul … UK c… Monzo has … http… https://t… 2024-05-08… "Monzo…
- 7 techcrun… Tech… Brian… iRob… iRobot Tue… http… https://t… 2024-05-08… "iRobo…
- 8 techcrun… Tech… Devin… Goog… Google Dee… http… https://t… 2024-05-07… "Googl…
- 9 techcrun… Tech… Tim D… Myco… The startu… http… https://t… 2024-05-07… "Usual…
-10 techcrun… Tech… Kyle … Cont… Xtend, a d… http… https://t… 2024-05-07… "Close…</code></pre>
-</div>
-</div>
-<p>Using this link, we are able to specify different keywords and select only from the recent year.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">access</span>(<span class="at">url_id =</span> <span class="st">"https://newsapi.org/v2/top-headlines?sources=techcrunch&amp;apiKey=d042b6702b44494f8531596ad64cf58c"</span>, </span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">title_keywords =</span> <span class="fu">c</span>(<span class="st">"uber one"</span>, <span class="st">"crypto"</span>, <span class="st">"macbooks"</span>), </span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">starting_year =</span> <span class="dv">2024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 8
-  source$id  $name author title description url   urlToImage publishedAt content
-  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;       &lt;chr&gt;  
-1 techcrunch Tech… Alex … $450… This morni… http… https://t… 2024-05-08… "Good …
-2 techcrunch Tech… Alex … Watc… Would you … http… https://t… 2024-05-08… "Apple…
-3 techcrunch Tech… Rebec… Uber… Uber plans… http… https://t… 2024-05-08… "Uber …</code></pre>
+ 1 &lt;NA&gt;      Gizm… Harri… Appl… As Apple e… http… https://i… 2024-06-15… "As Ap…
+ 2 the-verge The … David… The … Plus: the … http… https://c… 2024-06-23… "The n…
+ 3 &lt;NA&gt;      Desi… Kelly… Invi… New seatin… http… https://d… 2024-06-19… "The p…
+ 4 &lt;NA&gt;      Seth… Seth … The … Dan Dennet… http… https://s… 2024-06-17… "Dan D…
+ 5 &lt;NA&gt;      Mit.… &lt;NA&gt;   Shea… An approac… http… https://m… 2024-06-16… "An ap…
+ 6 &lt;NA&gt;      BBC … BBC S… Engl… England's … http… https://i… 2024-06-18… "On th…
+ 7 &lt;NA&gt;      Laug… Lori … A Wh… ForgeCore … http… https://l… 2024-06-19… "Laugh…
+ 8 &lt;NA&gt;      Idyl… &lt;NA&gt;   Exce… I've been … http… &lt;NA&gt;       2024-06-16… "Publi…
+ 9 &lt;NA&gt;      BBC … &lt;NA&gt;   ‘If … England fo… http… https://i… 2024-06-18… "'He w…
+10 ign       IGN   Chris… We B… We piece t… http… https://a… 2024-06-18… "The n…
+# ℹ 90 more rows</code></pre>
 </div>
 </div>
 

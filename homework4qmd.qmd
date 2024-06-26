@@ -147,8 +147,6 @@ my_wrapper(resp_data_frame, pred)
 
 ## Task 3: Querying an API and a Tidy-Style Function
 
-d042b6702b44494f8531596ad64cf58c
-
 1.  Use GET() from the httr package to return information about a topic that you are interested in that has been in the news lately (store the result as an R object). Note: We can only look 30 days into the past with a free account.
 
 ```{r}
@@ -172,53 +170,36 @@ library(tidyverse)
 library(purrr)
 ```
 
-This function will take in a url. If no title_keywords are specified, it returns the whole data set. If title_keywords are specified, it will search the title to find matches and filter based on those matches.
-
+This function will take in an api_key, a title, and a time, and return a parsed data set as a tibble.
 ```{r}
-access <- function(url_id, title_keywords = NULL, starting_year = 0,...){
-  id_info <- httr::GET(url_id)
+access_function <- function(api_key, title, time){
+  url_start <- "https://newsapi.org/v2/everything?q="
+  url_full <- paste(url_start, 
+                    title, "&from=",
+                    time,
+                    "&apiKey=",
+                    api_key,
+                    sep ="")
+  id_info <- httr::GET(url_full)
   parsed <- fromJSON(rawToChar(id_info$content))
   headline_info <- tibble::as_tibble(parsed$articles)
-  # if no title keywords are specified, return the whole data set.
-  if (is.null(title_keywords)){
-  return(headline_info)}
-  else {
   
-  # lower case the title keywords and create a 
-  lower_case <- tolower(title_keywords)
-  vector_keywords <- paste(lower_case, collapse = "|")
-
-   filtered <- headline_info |>
-    filter(grepl(vector_keywords, tolower(title)),
-           as.numeric(substr(publishedAt,1,4)) >= starting_year)
-  # if title keywords are specified, we will use str_detect to find look through and filter the titles.
-  return(filtered)}
+  return(headline_info)
 }
 ```
 
-We will test our function by accessing the API used before.
-
+We will test our function by using our api key and specifying articles about cars from 2024-06-01.
 ```{r}
-access(url_id = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d042b6702b44494f8531596ad64cf58c")
+cars <- access_function(api_key = "d042b6702b44494f8531596ad64cf58c",
+        title = "cars",
+        time = "2024-06-01")
+cars
 ```
 
-Now, we will test it by specifying keywords to select different articles.
-
+Now, we will test it again using our api key and specifying articles about chess from 2024-06-15.
 ```{r}
-access(url_id = "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d042b6702b44494f8531596ad64cf58c", 
-       title_keywords = c("hedge", "prime day"))
-```
-
-Now, lets try testing it by accessing a different link.
-
-```{r}
-access(url_id = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=d042b6702b44494f8531596ad64cf58c")
-```
-
-Using this link, we are able to specify different keywords and select only from the recent year.
-
-```{r}
-access(url_id = "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=d042b6702b44494f8531596ad64cf58c", 
-       title_keywords = c("uber one", "crypto", "macbooks"), 
-       starting_year = 2024)
+chess <- access_function(api_key = "d042b6702b44494f8531596ad64cf58c",
+         title = "chess",
+         time = "2024-06-15")
+chess
 ```
